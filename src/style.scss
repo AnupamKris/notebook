@@ -35,7 +35,35 @@
   height: 100%;
 }
 
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
 .ProseMirror {
   outline: none;
   color: var(--color-text);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-text);
+  font-family: Poppins;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

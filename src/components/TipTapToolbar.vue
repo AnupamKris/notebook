@@ -1,44 +1,45 @@
 <template>
   <div class="toolbar" v-if="editor">
-    <button
-      @click="editor.chain().focus().toggleBold().run()"
-      :disabled="!editor.can().chain().focus().toggleBold().run()"
-      :class="{ 'is-active': editor.isActive('bold') }"
-    >
+    <button @click="editor.chain().focus().toggleBold().run()"
+      :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
       <span class="material-symbols-outlined"> format_bold </span>
     </button>
-    <button
-      @click="editor.chain().focus().toggleUnderline().run()"
-      :class="{ 'is-active': editor.isActive('underline') }"
-    >
+    <button @click="editor.chain().focus().toggleUnderline().run()"
+      :class="{ 'is-active': editor.isActive('underline') }">
       <span class="material-symbols-outlined"> format_underlined </span>
     </button>
-    <button
-      @click="editor.chain().focus().toggleItalic().run()"
-      :class="{ 'is-active': editor.isActive('italic') }"
-    >
+    <button @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
       <span class="material-symbols-outlined"> format_italic </span>
     </button>
-    <button
-      @click="editor.chain().focus().toggleCodeBlock().run()"
-      :class="{ 'is-active': editor.isActive('codeBlock') }"
-    >
+    <button @click="editor.chain().focus().toggleCodeBlock().run()"
+      :class="{ 'is-active': editor.isActive('codeBlock') }">
+      <span class="material-symbols-outlined"> code_blocks </span>
+    </button>
+    <button @click="editor.chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }">
       <span class="material-symbols-outlined"> code </span>
     </button>
 
-    <button @click="getText">get</button>
+    <button @click="exportToPdf">
+      <span class="material-symbols-outlined"> picture_as_pdf </span>
+    </button>
   </div>
 </template>
 
 <script setup>
+
+
+
 const props = defineProps({
   editor: Object,
+  exportToPdf: Function,
 });
 
 const getText = () => {
   console.log("riunng");
   console.log(props.editor.getHTML());
 };
+
+
 </script>
 
 <style lang="scss" scoped>
