@@ -1,18 +1,44 @@
 <template>
   <main :class="theme">
-    <SideBar :toggleTheme :theme :projects :createProject :selectProject :addToFavorite :closeProject />
+    <SideBar
+      :toggleTheme
+      :theme
+      :projects
+      :createProject
+      :selectProject
+      :addToFavorite
+      :closeProject
+      :turnOnPopOut
+      v-if="!popout"
+    />
     <div class="container" v-if="currentProject">
       <!-- <input type="text" v-model="username" />
       <input type="text" v-model="roomId" />
       <button @click="joinRoom">Join</button> -->
-      <input class="title" type="text" v-model="currentProject.title" @focus="checkEmpty" />
-      <TipTap v-model="currentProject.content" :title="currentProject.title" :exportToPdf />
+      <input
+        class="title"
+        type="text"
+        v-model="currentProject.title"
+        @focus="checkEmpty"
+      />
+      <TipTap
+        v-model="currentProject.content"
+        :title="currentProject.title"
+        :exportToPdf
+      />
     </div>
     <div class="container c-center" v-else>
       <h3>Favorites</h3>
-      <div class="recent-projects" v-if="projects.filter(p => p.favorite).length">
-        <div class="project" v-for="project in projects.filter(p => p.favorite)" :key="project.id"
-          @click="selectProject(project.id)">
+      <div
+        class="recent-projects"
+        v-if="projects.filter((p) => p.favorite).length"
+      >
+        <div
+          class="project"
+          v-for="project in projects.filter((p) => p.favorite)"
+          :key="project.id"
+          @click="selectProject(project.id)"
+        >
           <p>{{ project.title }}</p>
           <p class="content" v-html="project.content"></p>
         </div>
@@ -22,8 +48,12 @@
 
       <h3>Recents</h3>
       <div class="recent-projects" v-if="projects.slice(0, 4).length">
-        <div class="project" v-for="project in projects.slice(0, 4)" :key="project.id"
-          @click="selectProject(project.id)">
+        <div
+          class="project"
+          v-for="project in projects.slice(0, 4)"
+          :key="project.id"
+          @click="selectProject(project.id)"
+        >
           <p>{{ project.title }}</p>
           <p class="content" v-html="project.content"></p>
         </div>
@@ -41,8 +71,10 @@
 import { Artico } from "@rtco/client";
 import { v4 } from "uuid";
 import html2pdf from "html2pdf.js";
+
 // import { fabric } from "fabric";
 
+const popout = ref(false);
 const projects = ref([]);
 const currentProject = ref(null);
 const roomId = ref("123");
@@ -54,6 +86,10 @@ const memberDetails = ref({});
 
 const addToFavorite = (project) => {
   project.favorite = !project.favorite;
+};
+
+const turnOnPopOut = () => {
+  // popout.value = true;
 };
 
 const checkEmpty = (e) => {
@@ -78,7 +114,6 @@ const selectProject = (projectId) => {
   currentProject.value = null;
   const project = projects.value.find((p) => p.id === projectId);
 
-
   currentProject.value = project;
   currentProject.value.lastUpdated = new Date();
 };
@@ -102,10 +137,6 @@ const exportToPdf = () => {
     },
   });
 };
-
-
-
-
 
 let room;
 let timeout;
@@ -159,17 +190,20 @@ rtco.on("open", () => {
   console.log("Connected to RTCO server", rtco.id);
 });
 
-watch([currentProject], () => {
-  console.log("Project changed", currentProject.value);
+watch(
+  [currentProject],
+  () => {
+    console.log("Project changed", currentProject.value);
 
-  // sorrt projects by date and then by favorite
-  projects.value.sort((a, b) => {
-    return b.favorite - a.favorite || b.lastUpdated - a.lastUpdated;
-  });
+    // sorrt projects by date and then by favorite
+    projects.value.sort((a, b) => {
+      return b.favorite - a.favorite || b.lastUpdated - a.lastUpdated;
+    });
 
-  localStorage.setItem("projects", JSON.stringify(projects.value));
-
-}, { deep: true });
+    localStorage.setItem("projects", JSON.stringify(projects.value));
+  },
+  { deep: true }
+);
 
 onMounted(() => {
   let savedProjects = localStorage.getItem("projects");
@@ -217,7 +251,6 @@ onMounted(() => {
   // border-radius: 5px;
   margin: 10px 0;
   font-family: Consolas;
-
 }
 
 main {
@@ -247,7 +280,6 @@ main {
     /* IE and Edge */
     scrollbar-width: none;
     /* Firefox */
-
 
     .title {
       font-size: 24px;
@@ -329,10 +361,8 @@ main {
         overflow: hidden;
         padding-bottom: 10px;
 
-
-
         &:before {
-          content: '';
+          content: "";
           width: 100%;
           height: 100%;
           position: absolute;
@@ -340,7 +370,13 @@ main {
           top: 0;
           // background: linear-gradient(transparent 150px, var(--color-background-tertiary));
           background: rgb(74, 135, 255);
-          background: linear-gradient(180deg, transparent 0%, transparent 150px, var(--color-background-tertiary) 210px, var(--color-background-tertiary) 220px);
+          background: linear-gradient(
+            180deg,
+            transparent 0%,
+            transparent 150px,
+            var(--color-background-tertiary) 210px,
+            var(--color-background-tertiary) 220px
+          );
         }
 
         p {
@@ -378,7 +414,6 @@ main {
       background: var(--color-background-secondary);
 
       color: var(--color-text);
-
     }
   }
 }
